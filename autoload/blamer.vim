@@ -8,7 +8,7 @@ set cpo&vim
 
 let s:git_root = ''
 let s:blamer_prefix = get(g:, 'blamer_prefix', '   ')
-let s:blamer_template = get(g:, 'blamer_template', '<committer>, <committer-time> • <summary>')
+let s:blamer_template = get(g:, 'blamer_template', '<hearts> <committer>, <committer-time> • <summary>')
 let s:blamer_date_format = get(g:, 'blamer_date_format', '%d/%m/%y %H:%M')
 let s:blamer_user_name = ''
 let s:blamer_user_email = ''
@@ -153,6 +153,27 @@ function! blamer#GetMessage(file, line_number, line_count) abort
     let l:info.author = 'You'
     let l:info.committer = 'You'
     let l:info.summary = 'Uncommitted changes'
+  endif
+
+  let l:committer_hash_chars = sha256(l:info.committer)[:0] " change to 1 for more love
+  let l:commitmsg_hash_chars = sha256(l:info.summary)[:3] " change to 1 for more love
+  let l:hearts_array = ['💚', '🧡', '💙', '💜']
+  let l:zoo_array = ['🦝', '🦊', '🐬', '🐝' ,'🐈', '🐶', '🐮', '🐦', '🐧', '🐷', '🦉', '🐅', '🦁', '🦦', '🐠', '🦐']
+  let l:info.hearts = ''
+
+  for s:char in split(l:committer_hash_chars, '\zs')
+    let s:num = str2nr('0x' . s:char, 16)
+    let s:heart1 = l:hearts_array[s:num / 4]
+    let s:heart2 = l:hearts_array[s:num % 4]
+    let l:info.hearts = l:info.hearts . s:heart1 . s:heart2
+  endfor
+  for s:char in split(l:commitmsg_hash_chars, '\zs')
+    let s:num = str2nr('0x' . s:char, 16)
+    let s:animal = l:zoo_array[s:num]
+    let l:info.hearts = l:info.hearts . s:animal
+  endfor
+  if l:info.summary =~? 'Uncommitted changes'
+    let l:info.hearts = '💔'
   endif
 
   let l:message = s:blamer_template

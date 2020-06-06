@@ -1,3 +1,19 @@
+# lover.nvim
+
+This is just a silly patch. I'll backport changes from upstream if I get the
+time.
+
+Do congratulate the original author (@APZelos) for his awesome job
+
+## requirement
+
+You _need_ a terminal which supports colorful emojis. Installing them is beyond
+the scope of this plugin. There's a billion posts on how to make it work.
+
+## you, reading this
+
+You're awesome. take care.
+
 # blamer.nvim
 
 A git blame plugin for (neo)vim inspired by VS Code's GitLens plugin.
